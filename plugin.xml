@@ -1,0 +1,5 @@
+<plugin id="cordova-plugin-zebra-tcp" version="1.0.0">
+    <js-module src="www/ZebraTcpPrinter.js" name="ZebraTcpPrinter">
+        <clobbers target="cordova.plugins.zebraTcpPrinter" />
+    </js-module>
+</plugin>
