@@ -1,5 +1,25 @@
-<plugin id="cordova-plugin-zebra-tcp" version="1.0.0">
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin id="cordova-plugin-zebra-tcp" version="1.0.0"
+    xmlns="http://apache.org/cordova/ns/plugins/1.0">
+
+    <name>ZebraTcpPrinter</name>
+
     <js-module src="www/ZebraTcpPrinter.js" name="ZebraTcpPrinter">
         <clobbers target="cordova.plugins.zebraTcpPrinter" />
     </js-module>
+
+    <platform name="android">
+        <config-file target="res/xml/config.xml" parent="/*">
+            <feature name="ZebraTcpPrinter">
+                <param name="android-package" value="com.example.zebratcp.ZebraTcpPrinter" />
+            </feature>
+        </config-file>
+
+        <source-file src="src/android/ZebraTcpPrinter.java"
+            target-dir="src/com/example/zebratcp" />
+
+        <config-file target="AndroidManifest.xml" parent="/manifest">
+            <uses-permission android:name="android.permission.INTERNET" />
+        </config-file>
+    </platform>
 </plugin>

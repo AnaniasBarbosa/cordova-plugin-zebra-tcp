@@ -1,22 +1,50 @@
-public boolean execute(String action, JSONArray args, CallbackContext callbackContext) {
-    if (action.equals("print")) {
-        String ip = args.getString(0);
-        int port = args.getInt(1);
-        String zpl = args.getString(2);
+package com.example.zebratcp;
 
-        try {
-            Socket socket = new Socket(ip, port);
-            OutputStream os = socket.getOutputStream();
-            os.write(zpl.getBytes("UTF-8"));
-            os.flush();
-            socket.close();
+import org.apache.cordova.CallbackContext;
+import org.apache.cordova.CordovaPlugin;
+import org.json.JSONArray;
 
-            callbackContext.success("Printed");
-        } catch (Exception e) {
-            callbackContext.error(e.getMessage());
+import java.io.OutputStream;
+import java.net.Socket;
+
+public class ZebraTcpPrinter extends CordovaPlugin {
+
+    @Override
+    public boolean execute(String action, JSONArray args, CallbackContext callbackContext) {
+        if (action.equals("print")) {
+            try {
+                String ip = args.getString(0);
+                int port = args.getInt(1);
+                String zpl = args.getString(2);
+
+                cordova.getThreadPool().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            Socket socket = new Socket(ip, port);
+                            OutputStream os = socket.getOutputStream();
+
+                            os.write(zpl.getBytes("UTF-8"));
+                            os.flush();
+
+                            os.close();
+                            socket.close();
+
+                            callbackContext.success("Printed");
+                        } catch (Exception e) {
+                            callbackContext.error(e.getMessage());
+                        }
+                    }
+                });
+
+                return true;
+
+            } catch (Exception e) {
+                callbackContext.error(e.getMessage());
+                return true;
+            }
         }
 
-        return true;
+        return false;
     }
-    return false;
 }
